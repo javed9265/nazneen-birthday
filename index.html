@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14060f">
+<title>Happy Birthday, Nazneen 💛</title>
+<meta name="description" content="A little corner of the internet built entirely for Nazneen, on her birthday.">
+<link rel="preload" href="assets/lib/js/gsap.min.js" as="script">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%9C%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- ===================== ambient layers ===================== -->
+<div class="aurora" aria-hidden="true"></div>
+<canvas id="particles" aria-hidden="true"></canvas>
+<div id="petals" aria-hidden="true"></div>
+<div id="vignette" aria-hidden="true"></div>
+<div id="grain" aria-hidden="true"></div>
+
+<!-- ===================== tap-to-begin gate ===================== -->
+<div id="gate">
+  <div class="gate-inner">
+    <p class="gate-kicker">Some things are worth waiting for</p>
+
+    <button class="heart-btn" id="open-btn" aria-label="Tap the heart to begin the surprise">
+      <span class="heart-ring" aria-hidden="true"></span>
+      <span class="heart-ring" aria-hidden="true"></span>
+      <span class="heart-ring" aria-hidden="true"></span>
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+          <linearGradient id="heartGold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fff3cf"/>
+            <stop offset="45%" stop-color="#f4cf7a"/>
+            <stop offset="100%" stop-color="#c99a3f"/>
+          </linearGradient>
+        </defs>
+        <path class="heart-shape" d="M50 88C50 88 8 62 8 36 8 20 20 10 32 10c9 0 15 5 18 10 3-5 9-10 18-10 12 0 24 10 24 26 0 26-42 52-42 52z"/>
+      </svg>
+    </button>
+
+    <h1 class="gate-title">For Nazneen</h1>
+    <p class="gate-sub">There is a whole little world in here, made only for you.</p>
+    <span class="tap-hint"><span class="dot" aria-hidden="true"></span>Tap the heart</span>
+    <p class="gate-note">Turn your sound on 🎵 &nbsp;·&nbsp; Best with headphones</p>
+  </div>
+</div>
+
+<!-- ===================== music toggle ===================== -->
+<button id="music-btn" aria-label="Play or pause the background music" aria-pressed="false">
+  <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+</button>
+<audio id="bgm" loop preload="auto">
+  <source src="assets/music/song.mp3" type="audio/mpeg">
+  <source src="assets/music/song.m4a" type="audio/mp4">
+</audio>
+
+<button id="to-top" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<main>
+
+  <!-- ===================== hero ===================== -->
+  <section class="hero" id="top">
+    <div class="hero-frame">
+      <p class="hero-date">A day the world got better</p>
+      <h2 class="hero-name">Nazneen</h2>
+      <div class="hero-line" aria-hidden="true"><i></i>💛<i></i></div>
+      <p class="hero-headline">Happy Birthday</p>
+      <p class="hero-copy">The luckiest thing that ever happened to my ordinary days.</p>
+    </div>
+    <div class="scroll-cue" aria-hidden="true">
+      <span class="stem"></span>
+      Scroll
+    </div>
+  </section>
+
+  <!-- ===================== wax-sealed love letter ===================== -->
+  <section class="section" id="letter-section">
+    <div class="wrap-narrow center">
+      <span class="eyebrow">Something sealed, just for you</span>
+      <h2 class="section-title">Break the seal</h2>
+      <div class="rule" aria-hidden="true"></div>
+      <p class="lede">I wrote this slowly, the way I would say it if I had the courage out loud.</p>
+    </div>
+
+    <div class="letter-stage">
+      <!-- the wrapper breathes; #envelope keeps a perfectly still hit-box -->
+      <div class="envelope-float" id="envelope-float">
+        <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Tap the wax seal to open the love letter">
+          <div class="env-back" aria-hidden="true"></div>
+          <div class="env-letter" aria-hidden="true"></div>
+          <div class="env-flap" aria-hidden="true"></div>
+          <div class="env-front" aria-hidden="true"></div>
+          <div class="seal" aria-hidden="true"><span class="seal-ring"></span><span>N</span></div>
+        </div>
+      </div>
+      <p class="seal-hint" id="seal-hint">Tap the wax seal</p>
+
+      <article class="letter-paper" id="letter-paper" hidden>
+        <h3>My dearest Nazneen,</h3>
+        <p class="lp-meta">Written on your birthday · with all of me</p>
+
+        <p class="reveal-line">Every year the world quietly celebrates you for one day, and I spend all of it feeling like it should be <em>every</em> day — because that is how much of my life you have made better simply by being in it.</p>
+
+        <p class="reveal-line">You have this way of making small things feel enormous. A message at 2&nbsp;am. The sound of your laugh when something is only slightly funny. The way you remember the tiny details about people and keep them safe like they matter — because to you, they do.</p>
+
+        <p class="reveal-line">I hope this year is unreasonably kind to you. I hope you get the doors that open easily, the plans that don't fall apart, and the kind of happiness that makes you stop and think, <b>"wow, I'm really happy right now."</b></p>
+
+        <p class="reveal-line">And when it isn't kind — because some days won't be — I hope you remember that you are the most stubbornly loved person I know. You don't have to earn it. You never did.</p>
+
+        <p class="reveal-line">Thank you for being exactly, impossibly you.</p>
+
+        <p class="sign reveal-line">Always yours</p>
+
+        <span class="ps reveal-line">P.S. Go blow out the candles below. Make a wish — I already know what I'd wish for.</span>
+
+        <div class="letter-actions">
+          <button class="btn-ink" id="letter-next">Next, the cake →</button>
+          <button class="btn-ink" id="letter-reread">Read it again</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===================== swipeable photo gallery ===================== -->
+  <section class="section" id="gallery-section">
+    <div class="wrap">
+      <div class="center">
+        <span class="eyebrow">Five of my favourites</span>
+        <h2 class="section-title">You, in every light</h2>
+        <div class="rule" aria-hidden="true"></div>
+      </div>
+
+      <div class="gallery-shell">
+        <p class="gal-hint">Swipe · or tap to open</p>
+        <div class="swiper" id="gallery-swiper">
+          <div class="swiper-wrapper" id="gallery-track"><!-- slides injected by gallery.js --></div>
+        </div>
+        <button class="gal-nav gal-prev" id="gal-prev" aria-label="Previous photo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="gal-nav gal-next" id="gal-next" aria-label="Next photo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== interactive cake ===================== -->
+  <section class="section" id="cake-section">
+    <div class="wrap">
+      <div class="center">
+        <span class="eyebrow">Make a wish</span>
+        <h2 class="section-title">Blow out the candles</h2>
+        <div class="rule" aria-hidden="true"></div>
+        <p class="lede">Tap every flame, one by one. Close your eyes first.</p>
+      </div>
+
+      <div class="cake-stage">
+        <!-- the wrapper floats; the inner cake is a stable click surface -->
+        <div class="cake-float">
+          <div class="cake-wrap" id="cake-wrap">
+            <div class="candles" id="candles" role="group" aria-label="Birthday candles, tap each flame to blow it out"></div>
+            <div class="tier tier-top" aria-hidden="true"></div>
+            <div class="tier tier-mid" aria-hidden="true"></div>
+            <div class="tier tier-base" aria-hidden="true"></div>
+            <div class="plate" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <p class="cake-status" id="cake-status" role="status" aria-live="polite">
+          <strong>Five candles</strong> are still burning. Tap them out.
+        </p>
+        <button class="btn-gold cake-reset" id="cake-reset">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+          Light them again
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== birthday wish cards ===================== -->
+  <section class="section" id="wishes-section">
+    <div class="wrap">
+      <div class="center">
+        <span class="eyebrow">Four wishes, honestly meant</span>
+        <h2 class="section-title">For your year ahead</h2>
+        <div class="rule" aria-hidden="true"></div>
+      </div>
+
+      <div class="wish-grid" id="wish-grid">
+        <article class="wish-card" style="--rot:-.7deg">
+          <div class="wish-icon" aria-hidden="true">🌸</div>
+          <h3>May you be gentle with yourself</h3>
+          <p>You hold everyone else together so well. This year, let someone hold you — and let it be enough. You don't have to be strong every single hour.</p>
+          <span class="wc-no" aria-hidden="true">1</span>
+        </article>
+
+        <article class="wish-card" style="--rot:.5deg">
+          <div class="wish-icon" aria-hidden="true">✨</div>
+          <h3>May your dreams stop waiting</h3>
+          <p>The ones you say out loud and the ones you only think at midnight. May they all start happening quietly, then all at once.</p>
+          <span class="wc-no" aria-hidden="true">2</span>
+        </article>
+
+        <article class="wish-card" style="--rot:-.4deg">
+          <div class="wish-icon" aria-hidden="true">🫶</div>
+          <h3>May you feel this loved daily</h3>
+          <p>Not just today with cake and candles. On the ordinary Tuesdays, on the hard weeks, in the in-between moments you think nobody noticed.</p>
+          <span class="wc-no" aria-hidden="true">3</span>
+        </article>
+
+        <article class="wish-card" style="--rot:.8deg">
+          <div class="wish-icon" aria-hidden="true">♾️</div>
+          <h3>May we get every year together</h3>
+          <p>More bad jokes, more long talks, more of the comfortable silence nobody else understands. Every birthday from here, side by side.</p>
+          <span class="wc-no" aria-hidden="true">4</span>
+        </article>
+      </div>
+
+      <div class="reasons" id="reasons" aria-label="Reasons I love you"></div>
+    </div>
+  </section>
+
+  <!-- ===================== finale ===================== -->
+  <section class="finale" id="finale">
+    <div class="wrap-narrow center">
+      <span class="eyebrow">And that's the whole secret</span>
+      <p class="finale-quote">
+        Out of everyone in the world, I got to find you.
+        <em>Happy Birthday, Nazneen.</em>
+      </p>
+      <p class="finale-name">Nazneen</p>
+      <div class="rule" aria-hidden="true"></div>
+      <button class="btn-gold" id="celebrate-again">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>
+        One more time
+      </button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Made by hand, with far too much love <span class="foot-heart">♥</span> for Nazneen</p>
+</footer>
+
+<!-- ===================== lightbox ===================== -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <button class="lb-close" id="lb-close" aria-label="Close photo">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <img id="lb-img" alt="">
+  <p class="lb-cap" id="lb-cap"></p>
+</div>
+
+<canvas id="confetti-canvas" aria-hidden="true"></canvas>
+<div class="wish-shout" id="wish-shout" aria-hidden="true"><span>Happy Birthday, Nazneen!</span></div>
+
+<!-- ===================== scripts (all local, works offline) ===================== -->
+<script src="assets/lib/js/gsap.min.js"></script>
+<script src="assets/lib/js/ScrollTrigger.min.js"></script>
+<script src="assets/lib/js/canvas-confetti.common.min.js"></script>
+<script src="assets/lib/js/swiper-bundle.min.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/ambient.js"></script>
+<script src="assets/js/letter.js"></script>
+<script src="assets/js/gallery.js"></script>
+<script src="assets/js/cake.js"></script>
+<script src="assets/js/wishes.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+/* ==========================================================================
+   Happy Birthday, Nazneen — main stylesheet
+   Loaded in cascade order: tokens/base -> gate -> hero -> letter -> gallery
+   -> cake -> wishes -> vendor (swiper)
+   ========================================================================== */
+
+@import url("base.css");
+@import url("gate.css");
+@import url("hero.css");
+@import url("letter.css");
+@import url("gallery.css");
+@import url("cake.css");
+@import url("wishes.css");
+@import url("../lib/css/swiper-bundle.min.css");

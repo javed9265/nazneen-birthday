@@ -1,0 +1,139 @@
+/* ============================ cinematic tap-to-begin gate + hero ========= */
+
+#gate {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 6vh 24px;
+  background: radial-gradient(90% 70% at 50% 45%, #35112c 0%, #1b0713 55%, #0d0309 100%);
+  transition: opacity 1.1s var(--ease), visibility 1.1s;
+}
+
+/* The gate's own box must never swallow taps meant for the heart button:
+   pointer events are re-enabled only on the content wrapper. */
+#gate { pointer-events: none; }
+#gate .gate-inner { pointer-events: auto; }
+
+#gate.is-open { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.gate-inner { max-width: 660px; }
+
+.gate-kicker {
+  font-size: clamp(.6rem, 2.4vw, .72rem);
+  letter-spacing: .48em;
+  text-transform: uppercase;
+  color: rgba(253, 246, 238, .5);
+  margin: 0 0 26px;
+}
+
+.heart-btn {
+  position: relative;
+  width: clamp(150px, 42vw, 208px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 30px;
+  border-radius: 50%;
+  transition: transform .5s var(--ease);
+}
+
+.heart-btn:hover { transform: scale(1.06); }
+.heart-btn:active { transform: scale(.96); }
+.heart-btn svg { width: 60%; height: 60%; overflow: visible; }
+
+.heart-shape {
+  fill: url(#heartGold);
+  filter: drop-shadow(0 0 26px rgba(244, 207, 122, .7));
+  animation: heart-beat 1.5s var(--ease) infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes heart-beat {
+  0%, 100% { transform: scale(1); }
+  14%      { transform: scale(1.13); }
+  28%      { transform: scale(1); }
+  42%      { transform: scale(1.08); }
+  70%      { transform: scale(1); }
+}
+
+.heart-ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(244, 207, 122, .35);
+  border-radius: 50%;
+  animation: ring-out 2.6s var(--ease) infinite;
+}
+
+.heart-ring:nth-of-type(2) { animation-delay: .9s; }
+.heart-ring:nth-of-type(3) { animation-delay: 1.8s; }
+
+@keyframes ring-out {
+  0%   { transform: scale(.72); opacity: 0; }
+  22%  { opacity: .75; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.gate-title {
+  font-family: var(--script);
+  font-size: clamp(2.8rem, 11.5vw, 5.2rem);
+  line-height: 1;
+  margin: 0 0 10px;
+  background: linear-gradient(100deg, var(--gold-3), var(--gold) 35%, var(--rose-soft) 70%, var(--gold-3));
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sheen 7s linear infinite;
+}
+
+@keyframes sheen { to { background-position: 220% 0; } }
+
+.gate-sub {
+  font-family: var(--serif);
+  font-size: clamp(1rem, 4.2vw, 1.32rem);
+  font-style: italic;
+  color: rgba(253, 246, 238, .72);
+  margin: 0 0 34px;
+}
+
+.tap-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 30px;
+  border: 1px solid rgba(244, 207, 122, .42);
+  border-radius: 999px;
+  font-size: .74rem;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(244, 207, 122, .06);
+  transition: background .35s, border-color .35s, transform .35s var(--ease);
+}
+
+.tap-hint:hover {
+  background: rgba(244, 207, 122, .14);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.tap-hint .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--gold);
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: .3; transform: scale(.8); }
+  50%      { opacity: 1; transform: scale(1.25); }
+}
+
+.gate-note {
+  margin: 22px 0 0;
+  font-size: .7rem;
+  letter-spacing: .1em;
+  color: rgba(253, 246, 238, .34);
+}

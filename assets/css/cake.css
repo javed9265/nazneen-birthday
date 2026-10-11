@@ -1,0 +1,295 @@
+/* ================================= interactive cake + candles ============= */
+
+.cake-stage {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 10px 0 4px;
+}
+
+/* Deliberately NO idle float on the cake: the candle flames are small tap
+   targets, and a perpetually moving target is hostile to fingers. The
+   flickering flames + warm glow already give it life. */
+.cake-float {
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+/* a soft warm halo that breathes instead of moving the cake itself */
+.cake-float::before {
+  content: "";
+  position: absolute;
+  bottom: 4%;
+  width: 112%;
+  height: 90%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 100%, rgba(255, 176, 74, .16), transparent 66%);
+  filter: blur(22px);
+  pointer-events: none;
+  animation: cake-halo 4.5s var(--ease) infinite alternate;
+}
+
+@keyframes cake-halo {
+  from { opacity: .55; transform: scale(.96); }
+  to   { opacity: 1;   transform: scale(1.05); }
+}
+
+.cake-wrap {
+  position: relative;
+  width: min(360px, 84vw);
+}
+
+.cake-wrap::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -46px;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 186, 92, .38), rgba(255, 150, 60, .12) 45%, transparent 72%);
+  filter: blur(12px);
+  pointer-events: none;
+  transition: opacity .8s var(--ease);
+}
+
+.cake-wrap.all-out::before { opacity: 0; }
+
+/* Gap must exceed the 46px hit-area width so neighbouring candles never
+   overlap and steal each other's taps. */
+.candles {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: clamp(46px, 15vw, 62px);
+  margin-bottom: -3px;
+  z-index: 3;
+}
+
+.candle {
+  position: relative;
+  width: 13px;
+  height: clamp(46px, 13vw, 62px);
+  border-radius: 4px 4px 2px 2px;
+  background: repeating-linear-gradient(-38deg, #fff6f0 0 5px, #ffb7c8 5px 10px);
+  box-shadow: inset -3px 0 6px rgba(0, 0, 0, .18), 0 2px 5px rgba(0, 0, 0, .3);
+  cursor: pointer;
+  transition: transform .3s var(--ease);
+}
+
+/* The candle is visually slim, so an invisible hit-area extends the tappable
+   region to a comfortable ~46px square without altering the drawing. Apple's
+   HIG and WCAG 2.5.5 both call for at least 44px. */
+.candle::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -34px;               /* covers the flame too */
+  transform: translateX(-50%);
+  width: 46px;
+  height: calc(100% + 40px);
+  border-radius: 8px;
+}
+
+.candle:hover { transform: translateY(-2px) scale(1.04); }
+
+.candle .wick {
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 7px;
+  background: #4a3a2a;
+  border-radius: 1px;
+}
+
+.flame {
+  position: absolute;
+  left: 50%;
+  top: -34px;
+  width: 17px;
+  height: 30px;
+  border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%;
+  background: radial-gradient(60% 55% at 50% 72%, #fff8d8 0%, #ffd972 30%, #ff9c3c 62%, rgba(255, 90, 40, .85) 88%, transparent 100%);
+  filter: blur(.35px) drop-shadow(0 0 14px rgba(255, 168, 60, .85));
+  transform: translateX(-50%);
+  transform-origin: 50% 100%;
+  animation: flicker .16s steps(2, end) infinite alternate;
+  transition: opacity .28s ease, transform .28s ease;
+}
+
+@keyframes flicker {
+  from { transform: translateX(-50%) scale(1) rotate(-2.5deg); }
+  to   { transform: translateX(-50%) scale(1.09) rotate(2.5deg) scaleY(1.08); }
+}
+
+.flame::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -22px;
+  transform: translateX(-50%);
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 176, 74, .34), transparent 68%);
+}
+
+.candle.is-out .flame { opacity: 0; transform: translateX(-50%) scale(.2); animation: none; }
+
+.candle .smoke {
+  position: absolute;
+  left: 50%;
+  top: -30px;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(220, 220, 220, .45);
+  filter: blur(3px);
+  opacity: 0;
+}
+
+.candle.is-out .smoke { animation: smoke-rise 1.9s var(--ease) forwards; }
+
+@keyframes smoke-rise {
+  0%   { opacity: .5; transform: translate(-50%, 0) scale(.6); }
+  100% { opacity: 0;  transform: translate(-52%, -70px) scale(2.6); }
+}
+
+/* ---- cake tiers ---- */
+.tier {
+  position: relative;
+  border-radius: 8px 8px 5px 5px;
+  box-shadow: inset 0 -14px 24px rgba(0, 0, 0, .22), inset 0 8px 16px rgba(255, 255, 255, .12), 0 8px 18px rgba(0, 0, 0, .3);
+}
+
+.tier::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: -1px;
+  height: 26px;
+  border-radius: 8px 8px 0 0;
+  background:
+    radial-gradient(11px 15px at 11px 2px, #fff2f6 96%, transparent 100%),
+    radial-gradient(11px 15px at 33px 2px, #fff2f6 96%, transparent 100%),
+    radial-gradient(11px 15px at 55px 2px, #fff2f6 96%, transparent 100%),
+    radial-gradient(11px 15px at 77px 2px, #fff2f6 96%, transparent 100%),
+    radial-gradient(11px 15px at 99px 2px, #fff2f6 96%, transparent 100%),
+    linear-gradient(180deg, #fff2f6, #ffd9e6);
+  background-size: 22px 26px, 22px 26px, 22px 26px, 22px 26px, 22px 26px, 100% 100%;
+}
+
+.tier-top {
+  width: min(216px, 54vw);
+  height: clamp(62px, 17vw, 84px);
+  background: linear-gradient(180deg, #f7d9b0, #e0a97a 55%, #c98a5c);
+}
+
+.tier-mid {
+  width: min(280px, 70vw);
+  height: clamp(70px, 19vw, 92px);
+  background: linear-gradient(180deg, #d98aa8, #b85f84 55%, #98466a);
+  z-index: 2;
+}
+
+.tier-base {
+  width: min(344px, 84vw);
+  height: clamp(76px, 21vw, 100px);
+  background: linear-gradient(180deg, #f3cf9c, #d59f6c 55%, #b57c4c);
+  border-radius: 6px 6px 10px 10px;
+}
+
+.tier-base::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 34px;
+  background:
+    radial-gradient(14px 20px at 20px 0, #4a2a1d 97%, transparent 100%),
+    radial-gradient(14px 20px at 60px 0, #4a2a1d 97%, transparent 100%),
+    radial-gradient(14px 20px at 100px 0, #4a2a1d 97%, transparent 100%),
+    radial-gradient(14px 20px at 140px 0, #4a2a1d 97%, transparent 100%),
+    linear-gradient(180deg, #4a2a1d, #38200f);
+  background-size: 40px 34px, 40px 34px, 40px 34px, 40px 34px, 100% 100%;
+}
+
+.sprinkle {
+  position: absolute;
+  width: 5px; height: 2px;
+  border-radius: 2px;
+  background: var(--gold);
+  opacity: .85;
+}
+
+.plate {
+  width: min(400px, 96vw);
+  height: 15px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #e9e2d6, #b9ae9c 60%, #8d8271);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, .55);
+}
+
+.cake-status {
+  min-height: 52px;
+  text-align: center;
+  font-family: var(--serif);
+  font-size: clamp(1rem, 4.2vw, 1.22rem);
+  font-style: italic;
+  color: rgba(253, 246, 238, .78);
+  margin: 16px auto 0;
+  max-width: 34ch;
+}
+
+.cake-status strong { color: var(--gold); font-style: normal; font-weight: 600; }
+
+.cake-reset { margin: 14px auto 0; display: none; }
+.cake-reset.is-shown { display: inline-flex; }
+
+/* ---- celebration overlays ---- */
+.wish-shout {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.wish-shout.is-shown { animation: shout 3.4s var(--ease) forwards; }
+
+.wish-shout span {
+  font-family: var(--script);
+  font-size: clamp(2.6rem, 13vw, 7rem);
+  line-height: 1;
+  text-align: center;
+  padding: 0 20px;
+  background: linear-gradient(120deg, var(--gold-3), var(--gold) 40%, var(--rose-soft) 75%, var(--gold-3));
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 8px 30px rgba(0, 0, 0, .6));
+  animation: sheen 4s linear infinite;
+}
+
+@keyframes shout {
+  0%   { opacity: 0; transform: scale(.75); }
+  16%  { opacity: 1; transform: scale(1.05); }
+  26%  { transform: scale(1); }
+  78%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.12); }
+}
+
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  pointer-events: none;
+}
+

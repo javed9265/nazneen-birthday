@@ -1,0 +1,231 @@
+/* =============================== swipeable photo gallery ================= */
+
+/* The gallery is the widest thing on the page: Swiper legitimately lays its
+   slides out side by side, but the overflow must be CLIPPED by this box so it
+   never turns into a horizontal document scrollbar. */
+.gallery-shell {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 8px;
+}
+
+.gallery-shell .swiper {
+  width: 100%;
+  padding: 10px 4px 62px;
+  overflow: hidden;
+}
+
+.gallery-shell .swiper-slide {
+  width: min(78vw, 400px);
+  height: auto;
+  transition: transform .6s var(--ease), opacity .6s var(--ease);
+  opacity: .42;
+}
+
+.gallery-shell .swiper-slide-active { opacity: 1; }
+.gallery-shell .swiper-slide-prev,
+.gallery-shell .swiper-slide-next { opacity: .6; }
+
+/* polaroid card */
+.polaroid {
+  position: relative;
+  border-radius: 3px;
+  padding: 14px 14px 0;
+  background: linear-gradient(180deg, #fffdf8, #f6ecdb);
+  box-shadow:
+    0 26px 54px rgba(0, 0, 0, .52),
+    inset 0 0 0 1px rgba(180, 140, 96, .28);
+  transform: rotate(var(--tilt, -1.4deg));
+  transition: transform .6s var(--ease), box-shadow .6s var(--ease);
+  cursor: grab;
+}
+
+.swiper-slide-active .polaroid { transform: rotate(0deg) translateY(-6px); }
+.polaroid:hover { box-shadow: 0 34px 64px rgba(0, 0, 0, .6), inset 0 0 0 1px rgba(214, 172, 112, .5); }
+
+.photo-frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #2a1522 center / cover no-repeat;
+  border-radius: 1px;
+}
+
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity .9s var(--ease), transform 1.2s var(--ease);
+}
+
+.photo-frame img.is-loaded { opacity: 1; transform: scale(1); }
+
+/* glossy sheen sweep */
+.photo-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(112deg, transparent 38%, rgba(255, 255, 255, .3) 48%, transparent 58%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+
+.swiper-slide-active .photo-frame::after { animation: gloss 2.6s var(--ease) .35s 1; }
+
+@keyframes gloss { to { transform: translateX(120%); } }
+
+.photo-tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2.5deg);
+  width: 92px;
+  height: 26px;
+  background: linear-gradient(180deg, rgba(255, 240, 200, .5), rgba(232, 205, 150, .34));
+  border-left: 1px dashed rgba(255, 255, 255, .3);
+  border-right: 1px dashed rgba(255, 255, 255, .3);
+  backdrop-filter: blur(1px);
+  z-index: 3;
+}
+
+.polaroid figcaption {
+  padding: 16px 6px 22px;
+  text-align: center;
+}
+
+.polaroid figcaption .cap-no {
+  display: block;
+  font-size: .56rem;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  color: #b0875a;
+  margin-bottom: 7px;
+}
+
+.polaroid figcaption .cap-text {
+  font-family: var(--script);
+  font-size: clamp(1.32rem, 5.6vw, 1.72rem);
+  line-height: 1.15;
+  color: #6d2a3d;
+}
+
+/* gallery nav */
+.gal-nav {
+  position: absolute;
+  top: 42%;
+  z-index: 12;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 207, 122, .34);
+  background: rgba(20, 6, 15, .6);
+  backdrop-filter: blur(8px);
+  color: var(--gold);
+  transition: background .35s, transform .35s var(--ease), opacity .35s;
+}
+
+.gal-nav:hover { background: rgba(244, 207, 122, .18); transform: scale(1.08); }
+.gal-nav svg { width: 17px; height: 17px; }
+.gal-prev { left: 6px; }
+.gal-next { right: 6px; }
+
+/* pagination lives in .gallery-shell (Swiper 11 renders outside .swiper) */
+.gallery-shell .swiper-pagination {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  z-index: 12;
+}
+
+.gallery-shell .swiper-pagination-bullet {
+  width: 7px; height: 7px;
+  margin: 0 !important;
+  background: rgba(244, 207, 122, .32);
+  opacity: 1;
+  border-radius: 999px;
+  transition: width .4s var(--ease), background .4s var(--ease);
+  cursor: pointer;
+}
+
+.gallery-shell .swiper-pagination-bullet-active {
+  width: 26px;
+  background: var(--gold);
+}
+
+.gal-hint {
+  margin: 0 0 6px;
+  text-align: center;
+  font-size: .6rem;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  color: rgba(253, 246, 238, .38);
+}
+
+/* ---- lightbox ---- */
+#lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(8, 2, 6, .93);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .45s var(--ease), visibility .45s;
+}
+
+#lightbox.is-open { opacity: 1; visibility: visible; }
+
+#lightbox img {
+  max-width: min(94vw, 820px);
+  max-height: 82vh;
+  border-radius: 3px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .7);
+  transform: scale(.94);
+  transition: transform .5s var(--ease);
+}
+
+#lightbox.is-open img { transform: scale(1); }
+
+#lightbox .lb-cap {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  font-family: var(--script);
+  font-size: clamp(1.3rem, 5.5vw, 1.9rem);
+  color: var(--gold-3);
+  text-align: center;
+  width: min(90vw, 640px);
+}
+
+.lb-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(244, 207, 122, .34);
+  color: var(--gold);
+  transition: background .3s, transform .3s;
+}
+
+.lb-close:hover { background: rgba(244, 207, 122, .18); transform: rotate(90deg); }
+
+@media (max-width: 720px) {
+  .gallery-shell .swiper-slide { width: 76vw; }
+  .gal-nav { display: none; }
+  .gallery-shell .swiper { padding-bottom: 54px; }
+}
